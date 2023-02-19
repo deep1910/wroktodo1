@@ -2,6 +2,8 @@ import React from "react"
 import './App.css';
 import Form from "./components/Form";
 import TodoList from "./components/TodoLIst";
+import Motive from "./components/Motive";
+
 
 
 function App() {
@@ -20,8 +22,13 @@ function App() {
 //   // console.log(todoLocal)
 // },[])
 
-
-
+//NOTES//////////////////////////////
+    // const [notes, setNotes] = React.useState([])
+    // const [currentNoteId, setCurrentNoteId] = React.useState(
+    //   (notes[0] && notes[0].id) || ""
+    // )
+    
+//////////////////////////////////////
 
   React.useEffect(()=>{
     // console.log("hey")
@@ -65,58 +72,80 @@ function App() {
 
 
 
+/////////////////////////////////////////////////////
+  
+    
+    function createNewNote() {
+        const newNote = {
+            id: nanoid(),
+            body: "# Type your markdown note's title here"
+        }
+        setNotes(prevNotes => [newNote, ...prevNotes])
+        setCurrentNoteId(newNote.id)
+    }
+    
+    function updateNote(text) {
+        setNotes(oldNotes => oldNotes.map(oldNote => {
+            return oldNote.id === currentNoteId
+                ? { ...oldNote, body: text }
+                : oldNote
+        }))
+    }
+    
+    function findCurrentNote() {
+        return notes.find(note => {
+            return note.id === currentNoteId
+        }) || notes[0]
+    }
+///////////////////////////////////////////////////
 
+  const [quote, setquote] = React.useState("");
+
+const generatequote = ()=>{
+  // e.preventDefault();
+  fetch("https://type.fit/api/quotes")
+    .then(function(response) {
+      return response.json();
+    })
+    .then(function(data) {
+      let random = Math.ceil(Math.random() * 1643)
+      // console.log(data[0].text);
+      setquote(data[random].text)
+      // return (data[0].text);
+    });
+
+}
+ React.useEffect(()=>{
+  // e.preventdefault()
+   generatequote()
+ },[])
+
+
+  const [name,setname] = React.useState("")
+
+   
+  const inputname = (e)=>{
+     setname(e.target.value)
+  }
 
 
   return (
-    <div className="App">
-      <header>
-        <h1>Hello React</h1>
-      </header>
-      <Form todos={todos} setTodos={setTodos} setInputText={setInputText} inputText={inputText}  setStatus={setStatus}/>
-      <TodoList  filterTodos={filterTodos}   todos={todos} setTodos={setTodos} />
+    
+        <div className="App">  
+          <header>
+            <h1>Hello React</h1>
+          </header>
+          <h1 className="quote">{quote}</h1>
+          <Form todos={todos} setTodos={setTodos} setInputText={setInputText} inputText={inputText}  setStatus={setStatus}/>
+          <TodoList  filterTodos={filterTodos}   todos={todos} setTodos={setTodos} />
+        </div>
+    
+      
+      
+      
      
-     
-     
-     
-      {/* {
-            notes.length > 0 
-            ?
-            <Split 
-                sizes={[30, 70]} 
-                direction="horizontal" 
-                className="split"
-            >
-                <Sidebar
-                    notes={notes}
-                    currentNote={findCurrentNote()}
-                    setCurrentNoteId={setCurrentNoteId}
-                    newNote={createNewNote}
-                />
-                {
-                    currentNoteId && 
-                    notes.length > 0 &&
-                    <Editor 
-                        currentNote={findCurrentNote()} 
-                        updateNote={updateNote} 
-                    />
-                }
-            </Split>
-            :
-            <div className="no-notes">
-                <h1>You have no notes</h1>
-                <button 
-                    className="first-note" 
-                    onClick={createNewNote}
-                >
-                    Create one now
-                </button>
-            </div>
-        } */}
 
 
-
-    </div>
   );
 }
 
