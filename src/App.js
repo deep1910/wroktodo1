@@ -2,7 +2,6 @@ import React from "react"
 import './App.css';
 import Form from "./components/Form";
 import TodoList from "./components/TodoLIst";
-import Motive from "./components/Motive";
 
 
 
@@ -121,13 +120,7 @@ const generatequote = ()=>{
  },[])
 
 
-  const [name,setname] = React.useState("")
-
-   
-  const inputname = (e)=>{
-     setname(e.target.value)
-  }
-
+ 
 
   return (
     
